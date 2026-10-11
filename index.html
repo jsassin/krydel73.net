@@ -1,0 +1,730 @@
+<!-- Tailwind CSS Config and Script -->
+    <script>
+        window.tailwind = {
+            config: {
+                theme: {
+                    extend: {
+                        colors: {
+                            black: '#000000',
+                            red: '#ff0000',
+                        },
+                        fontFamily: {
+                            mono: ['JetBrains Mono', 'monospace'],
+                            title: ['Sixtyfour', 'cursive'],
+                        }
+                    }
+                }
+            }
+        };
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: JetBrains Mono and Sixtyfour -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700;800&family=Sixtyfour&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        black: '#000000',
+                        red: '#ff0000',
+                    },
+                    fontFamily: {
+                        mono: ['JetBrains Mono', 'monospace'],
+                        title: ['Sixtyfour', 'cursive'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        :root {
+            --red: #ff0000;
+            --black: #000000;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: var(--black);
+            color: var(--red);
+            font-family: 'JetBrains Mono', monospace;
+            overflow: hidden; /* Strict Dashboard layout - no main page scroll */
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Hide Scrollbar for internal scrolling sections */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        #tv-noise {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.12; /* Low opacity to keep text readable */
+            image-rendering: pixelated; /* Chunky retro look */
+        }
+
+        .crt-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 2;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 4px, 3px 100%;
+            box-shadow: inset 0 0 100px rgba(0,0,0,0.9); /* Vignette */
+        }
+
+        .fluorescent-flicker {
+            animation: broken-tube 12s infinite;
+        }
+        @keyframes broken-tube {
+            0%, 94% { opacity: 1; text-shadow: 0 0 10px rgba(255,0,0,0.8), 0 0 20px rgba(255,0,0,0.6); }
+            94.5% { opacity: 0.2; text-shadow: none; }
+            95% { opacity: 1; text-shadow: 0 0 10px rgba(255,0,0,0.8), 0 0 30px rgba(255,0,0,0.6); }
+            95.5% { opacity: 0.1; text-shadow: none; }
+            96% { opacity: 1; text-shadow: 0 0 10px rgba(255,0,0,0.8); }
+            97% { opacity: 0.4; text-shadow: none; }
+            97.5% { opacity: 1; text-shadow: 0 0 10px rgba(255,0,0,0.8), 0 0 20px rgba(255,0,0,0.6); }
+            100% { opacity: 1; text-shadow: 0 0 10px rgba(255,0,0,0.8), 0 0 20px rgba(255,0,0,0.6); }
+        }
+
+        .cursor { animation: blink 1s step-end infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+        .nav-link { 
+            cursor: pointer; 
+            text-transform: uppercase; 
+            opacity: 0; /* Hidden initially for JS typewriter */
+            transition: background-color 0.2s, color 0.2s;
+            padding: 2px 10px;
+        }
+        .nav-link.active, .nav-link:hover {
+            background-color: var(--red);
+            color: var(--black);
+        }
+
+        .content-section {
+            display: none;
+            width: 100%;
+            height: 100%;
+        }
+        .content-section.active {
+            display: flex;
+            animation: crt-flicker-in 0.4s ease-out forwards;
+        }
+        @keyframes crt-flicker-in {
+            0% { opacity: 0; filter: brightness(2); transform: scale(0.98); }
+            100% { opacity: 1; filter: brightness(1); transform: scale(1); }
+        }
+
+        .roulette-container {
+            width: 100%;
+            overflow: hidden;
+            background: var(--black);
+            padding: 10px 0;
+            position: relative;
+        }
+        .roulette-track {
+            display: flex;
+            width: max-content;
+            gap: 20px;
+            animation: scroll-left 35s linear infinite;
+        }
+        .roulette-track:hover {
+            animation-play-state: paused;
+        }
+        @keyframes scroll-left {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .roulette-item {
+            width: 350px;
+            aspect-ratio: 16/9;
+            flex-shrink: 0;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            background-color: #111;
+        }
+        .roulette-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+        .roulette-item:hover img {
+            transform: scale(1.05);
+        }
+
+        .crt-glitch {
+            position: relative;
+            z-index: 100;
+        }
+        .crt-glitch img {
+            animation: crt-skew-anim 0.15s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+        }
+        @keyframes crt-skew-anim {
+            0% { transform: skewX(0deg) scale(1) translate(0,0); filter: brightness(1); }
+            20% { transform: skewX(-20deg) scale(1.05) translate(-10px, 4px); filter: brightness(2) contrast(2) hue-rotate(-40deg); }
+            40% { transform: skewX(20deg) scale(1) translate(10px, -4px); filter: brightness(0.5) hue-rotate(40deg); }
+            60% { transform: skewX(-10deg) scale(1.02) translate(-4px, 2px); filter: brightness(1.8); }
+            80% { transform: skewX(10deg) scale(1) translate(4px, -2px); filter: brightness(1); }
+            100% { transform: skewX(0deg) scale(1) translate(0,0); filter: brightness(1); }
+        }
+        .crt-glitch::before, .crt-glitch::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: inherit;
+            pointer-events: none;
+            background-size: cover;
+            background-position: center;
+        }
+        .crt-glitch::before {
+            background-image: var(--bg-image);
+            animation: glitch-red 0.15s both;
+            mix-blend-mode: screen;
+            z-index: 2;
+        }
+        .crt-glitch::after {
+            background-image: var(--bg-image);
+            animation: glitch-cyan 0.15s both;
+            mix-blend-mode: screen;
+            z-index: 3;
+        }
+        @keyframes glitch-red {
+            0%, 100% { opacity: 0; transform: translate(0); filter: none; }
+            20%, 60% { opacity: 0.9; transform: translate(-6px, 3px); filter: sepia(1) hue-rotate(-50deg) saturate(400%); }
+        }
+        @keyframes glitch-cyan {
+            0%, 100% { opacity: 0; transform: translate(0); filter: none; }
+            20%, 60% { opacity: 0.9; transform: translate(6px, -3px); filter: sepia(1) hue-rotate(150deg) saturate(400%); }
+        }
+
+        .immortality-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-auto-flow: dense;
+            gap: 20px; /* 20px gaps as requested */
+            width: 100%;
+            padding-bottom: 40px;
+        }
+        @media (min-width: 768px) { .immortality-grid { grid-template-columns: repeat(3, 1fr); } }
+        @media (min-width: 1024px) { .immortality-grid { grid-template-columns: repeat(4, 1fr); } }
+        
+        .immortality-item {
+            position: relative;
+            cursor: crosshair;
+            overflow: hidden;
+            background: #111; /* Fallback for missing images */
+        }
+        .immortality-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+        .immortality-item:hover img {
+            transform: scale(1.03);
+        }
+        
+        /* Grid Column and Row Spans */
+        .span-2x2 { grid-column: span 2; grid-row: span 2; aspect-ratio: 1; }
+        .span-2x1 { grid-column: span 2; grid-row: span 1; aspect-ratio: 2/1; }
+        .span-1x2 { grid-column: span 1; grid-row: span 2; aspect-ratio: 1/2; }
+        .span-1x1 { grid-column: span 1; grid-row: span 1; aspect-ratio: 1; }
+        .span-3x2 { grid-column: span 3; grid-row: span 2; aspect-ratio: 3/2; }
+
+        .info-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            text-align: center;
+            padding: 1rem;
+        }
+        .immortality-item:hover .info-overlay {
+            opacity: 1;
+        }
+
+        .list-item {
+            cursor: pointer;
+            position: relative;
+            border-bottom: 1px solid rgba(255, 0, 0, 0.3);
+            padding: 1.5rem 0;
+            transition: padding-left 0.2s, background-color 0.2s;
+        }
+        .list-item:hover {
+            padding-left: 1.5rem;
+            background-color: rgba(255, 0, 0, 0.1);
+        }
+        
+        .fixed-preview {
+            position: fixed;
+            top: 50%;
+            right: 5%;
+            transform: translateY(-50%);
+            width: 45vw;
+            max-width: 600px;
+            aspect-ratio: 16/9;
+            opacity: 0;
+            pointer-events: none; /* Essential: Prevents the preview from blocking hover events */
+            z-index: 100;
+            transition: opacity 0.2s ease, transform 0.3s ease;
+            box-shadow: 0 0 40px rgba(0,0,0,0.9);
+            border: 1px solid var(--red); /* Subtle border for the preview */
+            background: var(--black);
+        }
+        .fixed-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .list-item:hover .fixed-preview {
+            opacity: 1;
+            transform: translateY(-50%) scale(1.02);
+        }
+
+        #video-modal { display: none; backdrop-filter: blur(5px); }
+        #video-modal.active { display: flex; z-index: 9999; }
+        .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; width: 100%; }
+        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+    </style>
+</head>
+<body class="selection:bg-red selection:text-black flex flex-col">
+
+    <!-- High-fidelity CRT Noise Generator Canvas -->
+    <canvas id="tv-noise"></canvas>
+    
+    <!-- CSS Scanlines and Vignette -->
+    <div class="crt-overlay"></div>
+
+    <header class="w-full flex flex-col items-center justify-center pt-8 pb-16 shrink-0 z-20 relative">
+        
+        <!-- Massive Centered Title (Sixtyfour Font + Flicker Animation) -->
+        <h1 class="font-title uppercase text-center leading-none mb-6 fluorescent-flicker flex items-center justify-center text-[12vw] md:text-[7rem] lg:text-[8rem]">
+            <span id="sys-title" data-text="KRYDEL73"></span><span id="title-cursor" class="cursor text-red font-mono ml-2">_</span>
+        </h1>
+        
+        <!-- Tight Navigation Links (JetBrains Mono) -->
+        <nav id="sys-nav" class="flex flex-wrap justify-center gap-2 md:gap-4 text-[10px] md:text-sm tracking-[0.2em] uppercase font-bold relative z-30">
+            <button class="nav-link type-target active" data-target="view-home" data-text="HOME"></button>
+            <button class="nav-link type-target" data-target="view-about" data-text="ABOUT"></button>
+            <button class="nav-link type-target" data-target="view-portfolio" data-text="PORTFOLIO"></button>
+            <button class="nav-link type-target" data-target="view-photos" data-text="PHOTOS"></button>
+            <button class="nav-link type-target" data-target="view-bullshit" data-text="BULLSH$T"></button>
+            <a href="#" class="nav-link type-target" data-text="INSTAGRAM"></a>
+            <button class="nav-link type-target" data-target="view-contact" data-text="CONTACT"></button>
+        </nav>
+    </header>
+
+    <main class="flex-grow w-full relative z-20 overflow-y-auto no-scrollbar px-6 md:px-12 pb-10">
+        
+        <!-- 1. HOME VIEW (Default) -->
+        <div id="view-home" class="content-section active flex-col h-full w-full max-w-screen-2xl mx-auto">
+            
+            <!-- Large Cinematic Video Placeholder -->
+            <div class="w-full flex-grow min-h-[350px] max-h-[65vh] relative group cursor-crosshair mb-8 glitch-target" data-video="https://www.youtube.com/embed/ScMzIvxBSi4?autoplay=1" style="--bg-image: url('https://images.unsplash.com/photo-1440404653325-ab127d49abc1?q=80&w=2070&auto=format&fit=crop');">
+                <img src="https://images.unsplash.com/photo-1440404653325-ab127d49abc1?q=80&w=2070&auto=format&fit=crop" class="w-full h-full object-cover" alt="Main Feature">
+                <div class="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                    <span class="text-red font-bold text-lg uppercase tracking-widest">[ PLAY SHOWREEL ]</span>
+                </div>
+            </div>
+
+            <!-- Infinitely Auto-scrolling Carousel -->
+            <div class="w-full flex-shrink-0 mt-auto pb-2">
+                <div class="roulette-container">
+                    <div class="roulette-track">
+                        <!-- Originals -->
+                        <div class="roulette-item glitch-target" data-video="https://player.vimeo.com/video/76979871?autoplay=1" style="--bg-image: url('https://images.unsplash.com/photo-1485846234645-a62644f84728?q=80&w=600&auto=format&fit=crop');"><img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?q=80&w=600&auto=format&fit=crop"></div>
+                        <div class="roulette-item glitch-target" data-video="https://player.vimeo.com/video/336812660?autoplay=1" style="--bg-image: url('https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=600&auto=format&fit=crop');"><img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=600&auto=format&fit=crop"></div>
+                        <div class="roulette-item glitch-target" data-video="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1" style="--bg-image: url('https://images.unsplash.com/photo-1585647347384-2593bc35786b?q=80&w=600&auto=format&fit=crop');"><img src="https://images.unsplash.com/photo-1585647347384-2593bc35786b?q=80&w=600&auto=format&fit=crop"></div>
+                        <div class="roulette-item glitch-target" data-video="https://player.vimeo.com/video/76979871?autoplay=1" style="--bg-image: url('https://images.unsplash.com/photo-1605369572399-05d8d64a0f6e?q=80&w=600&auto=format&fit=crop');"><img src="https://images.unsplash.com/photo-1605369572399-05d8d64a0f6e?q=80&w=600&auto=format&fit=crop"></div>
+                        <div class="roulette-item glitch-target" data-video="https://player.vimeo.com/video/336812660?autoplay=1" style="--bg-image: url('https://images.unsplash.com/photo-1571210862729-78a52d3779a2?q=80&w=600&auto=format&fit=crop');"><img src="https://images.unsplash.com/photo-1571210862729-78a52d3779a2?q=80&w=600&auto=format&fit=crop"></div>
+                        <!-- Duplicates for seamless infinite loop -->
+                        <div class="roulette-item glitch-target" data-video="https://player.vimeo.com/video/76979871?autoplay=1" style="--bg-image: url('https://images.unsplash.com/photo-1485846234645-a62644f84728?q=80&w=600&auto=format&fit=crop');"><img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?q=80&w=600&auto=format&fit=crop"></div>
+                        <div class="roulette-item glitch-target" data-video="https://player.vimeo.com/video/336812660?autoplay=1" style="--bg-image: url('https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=600&auto=format&fit=crop');"><img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=600&auto=format&fit=crop"></div>
+                        <div class="roulette-item glitch-target" data-video="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1" style="--bg-image: url('https://images.unsplash.com/photo-1585647347384-2593bc35786b?q=80&w=600&auto=format&fit=crop');"><img src="https://images.unsplash.com/photo-1585647347384-2593bc35786b?q=80&w=600&auto=format&fit=crop"></div>
+                        <div class="roulette-item glitch-target" data-video="https://player.vimeo.com/video/76979871?autoplay=1" style="--bg-image: url('https://images.unsplash.com/photo-1605369572399-05d8d64a0f6e?q=80&w=600&auto=format&fit=crop');"><img src="https://images.unsplash.com/photo-1605369572399-05d8d64a0f6e?q=80&w=600&auto=format&fit=crop"></div>
+                        <div class="roulette-item glitch-target" data-video="https://player.vimeo.com/video/336812660?autoplay=1" style="--bg-image: url('https://images.unsplash.com/photo-1571210862729-78a52d3779a2?q=80&w=600&auto=format&fit=crop');"><img src="https://images.unsplash.com/photo-1571210862729-78a52d3779a2?q=80&w=600&auto=format&fit=crop"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. PORTFOLIO VIEW -->
+        <div id="view-portfolio" class="content-section flex-col w-full h-full max-w-screen-2xl mx-auto">
+            
+            <!-- View Mode Toggles -->
+            <div class="flex justify-end items-center mb-8 text-xs md:text-sm uppercase tracking-widest font-bold">
+                <div class="flex gap-6">
+                    <button id="btn-thumb" class="text-red border-b-2 border-red pb-1 transition-colors">Thumb View</button>
+                    <button id="btn-list" class="text-red opacity-50 hover:opacity-100 border-b-2 border-transparent hover:border-red pb-1 transition-all">List View</button>
+                </div>
+            </div>
+
+            <!-- THUMB VIEW (Immortality Grid - Spaced out, No Borders, Full Color) -->
+            <div id="port-thumb" class="w-full">
+                <div class="immortality-grid">
+                    
+                    <div class="immortality-item span-2x2 glitch-target" data-video="https://player.vimeo.com/video/76979871?autoplay=1" style="--bg-image: url('https://images.unsplash.com/photo-1485846234645-a62644f84728?q=80&w=800&auto=format&fit=crop');">
+                        <img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?q=80&w=800&auto=format&fit=crop">
+                        <div class="info-overlay">
+                            <span class="text-2xl font-bold uppercase text-red font-mono">Neon Nights</span>
+                            <span class="text-[10px] tracking-widest mt-2 text-red font-mono">Dir / 2024</span>
+                        </div>
+                    </div>
+
+                    <div class="immortality-item span-1x1 glitch-target" data-video="https://www.youtube.com/embed/ScMzIvxBSi4?autoplay=1" style="--bg-image: url('https://images.unsplash.com/photo-1601506521937-0121a7fc2a6b?q=80&w=600&auto=format&fit=crop');">
+                        <img src="https://images.unsplash.com/photo-1601506521937-0121a7fc2a6b?q=80&w=600&auto=format&fit=crop">
+                        <div class="info-overlay">
+                            <span class="text-sm font-bold uppercase text-red font-mono">The Silence</span>
+                        </div>
+                    </div>
+
+                    <div class="immortality-item span-1x2 glitch-target" data-video="https://player.vimeo.com/video/336812660?autoplay=1" style="--bg-image: url('https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=600&auto=format&fit=crop');">
+                        <img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=600&auto=format&fit=crop">
+                        <div class="info-overlay">
+                            <span class="text-sm font-bold uppercase text-center text-red font-mono">Echoes</span>
+                        </div>
+                    </div>
+
+                    <div class="immortality-item span-2x1 glitch-target" data-video="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1" style="--bg-image: url('https://images.unsplash.com/photo-1585647347384-2593bc35786b?q=80&w=1000&auto=format&fit=crop');">
+                        <img src="https://images.unsplash.com/photo-1585647347384-2593bc35786b?q=80&w=1000&auto=format&fit=crop">
+                        <div class="info-overlay">
+                            <span class="text-lg font-bold uppercase text-red font-mono">Raw Nature</span>
+                            <span class="text-[10px] text-red mt-1 font-mono">DP / 2022</span>
+                        </div>
+                    </div>
+
+                    <div class="immortality-item span-1x1 glitch-target" data-video="https://player.vimeo.com/video/76979871?autoplay=1" style="--bg-image: url('https://images.unsplash.com/photo-1605369572399-05d8d64a0f6e?q=80&w=600&auto=format&fit=crop');">
+                        <img src="https://images.unsplash.com/photo-1605369572399-05d8d64a0f6e?q=80&w=600&auto=format&fit=crop">
+                        <div class="info-overlay">
+                            <span class="text-sm font-bold uppercase text-center text-red font-mono">Urban Decay</span>
+                        </div>
+                    </div>
+
+                    <div class="immortality-item span-3x2 glitch-target" data-video="https://player.vimeo.com/video/336812660?autoplay=1" style="--bg-image: url('https://images.unsplash.com/photo-1571210862729-78a52d3779a2?q=80&w=1200&auto=format&fit=crop');">
+                        <img src="https://images.unsplash.com/photo-1571210862729-78a52d3779a2?q=80&w=1200&auto=format&fit=crop">
+                        <div class="info-overlay">
+                            <span class="text-3xl font-bold uppercase text-red font-mono">Nightcall</span>
+                            <span class="text-xs tracking-widest mt-2 text-red font-mono">Dir / 2021</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- LIST VIEW (Pure CSS Hover) -->
+            <div id="port-list" class="hidden w-full md:w-2/3 max-w-4xl mx-auto mt-6 pb-20">
+                <ul class="flex flex-col w-full text-lg md:text-3xl font-bold font-mono">
+                    
+                    <li class="list-item" data-video="https://player.vimeo.com/video/76979871?autoplay=1">
+                        <div class="flex justify-between items-end">
+                            <span class="uppercase tracking-widest">Neon Nights</span>
+                            <span class="text-sm md:text-lg font-normal">2024</span>
+                        </div>
+                        <!-- Pure CSS fixed position preview -->
+                        <div class="fixed-preview"><img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?q=80&w=1000&auto=format&fit=crop"></div>
+                    </li>
+
+                    <li class="list-item" data-video="https://www.youtube.com/embed/ScMzIvxBSi4?autoplay=1">
+                        <div class="flex justify-between items-end">
+                            <span class="uppercase tracking-widest">The Silence</span>
+                            <span class="text-sm md:text-lg font-normal">2023</span>
+                        </div>
+                        <div class="fixed-preview"><img src="https://images.unsplash.com/photo-1601506521937-0121a7fc2a6b?q=80&w=1000&auto=format&fit=crop"></div>
+                    </li>
+
+                    <li class="list-item" data-video="https://player.vimeo.com/video/336812660?autoplay=1">
+                        <div class="flex justify-between items-end">
+                            <span class="uppercase tracking-widest">Echoes</span>
+                            <span class="text-sm md:text-lg font-normal">2023</span>
+                        </div>
+                        <div class="fixed-preview"><img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=1000&auto=format&fit=crop"></div>
+                    </li>
+
+                    <li class="list-item" data-video="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1">
+                        <div class="flex justify-between items-end">
+                            <span class="uppercase tracking-widest">Raw Nature</span>
+                            <span class="text-sm md:text-lg font-normal">2022</span>
+                        </div>
+                        <div class="fixed-preview"><img src="https://images.unsplash.com/photo-1585647347384-2593bc35786b?q=80&w=1000&auto=format&fit=crop"></div>
+                    </li>
+                    
+                    <li class="list-item" data-video="https://player.vimeo.com/video/336812660?autoplay=1">
+                        <div class="flex justify-between items-end">
+                            <span class="uppercase tracking-widest">Nightcall</span>
+                            <span class="text-sm md:text-lg font-normal">2021</span>
+                        </div>
+                        <div class="fixed-preview"><img src="https://images.unsplash.com/photo-1571210862729-78a52d3779a2?q=80&w=1000&auto=format&fit=crop"></div>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+
+        <!-- 3. PHOTOS VIEW -->
+        <div id="view-photos" class="content-section flex-col w-full h-full max-w-screen-2xl mx-auto">
+            <div class="immortality-grid">
+                <div class="immortality-item span-1x2 glitch-target" style="--bg-image: url('https://images.unsplash.com/photo-1551244072-5d12893278ab?q=80&w=600&auto=format&fit=crop');">
+                    <img src="https://images.unsplash.com/photo-1551244072-5d12893278ab?q=80&w=600&auto=format&fit=crop">
+                </div>
+                <div class="immortality-item span-2x2 glitch-target" style="--bg-image: url('https://images.unsplash.com/photo-1580130601254-05fa235abeab?q=80&w=1000&auto=format&fit=crop');">
+                    <img src="https://images.unsplash.com/photo-1580130601254-05fa235abeab?q=80&w=1000&auto=format&fit=crop">
+                </div>
+                <div class="immortality-item span-1x1 glitch-target" style="--bg-image: url('https://images.unsplash.com/photo-1493612276216-ee3925520721?q=80&w=600&auto=format&fit=crop');">
+                    <img src="https://images.unsplash.com/photo-1493612276216-ee3925520721?q=80&w=600&auto=format&fit=crop">
+                </div>
+                <div class="immortality-item span-1x1 glitch-target" style="--bg-image: url('https://images.unsplash.com/photo-1517409247657-3fbaf599a0cb?q=80&w=600&auto=format&fit=crop');">
+                    <img src="https://images.unsplash.com/photo-1517409247657-3fbaf599a0cb?q=80&w=600&auto=format&fit=crop">
+                </div>
+                <div class="immortality-item span-2x1 glitch-target" style="--bg-image: url('https://images.unsplash.com/photo-1604944439169-2f22d0d6118d?q=80&w=1000&auto=format&fit=crop');">
+                    <img src="https://images.unsplash.com/photo-1604944439169-2f22d0d6118d?q=80&w=1000&auto=format&fit=crop">
+                </div>
+            </div>
+        </div>
+
+        <div id="view-about" class="content-section flex-col items-center pt-24 h-full max-w-3xl mx-auto text-center font-mono">
+            <p class="text-xl md:text-2xl leading-loose tracking-[0.1em] font-bold">
+                Minimalist visual storytelling.<br>Based in Los Angeles, working worldwide.<br><br>
+                Focusing on the space between light and dark to create cinematic tension. 
+            </p>
+        </div>
+
+        <div id="view-bullshit" class="content-section flex-col items-center pt-32 h-full text-center font-mono">
+            <h2 class="text-4xl md:text-6xl font-bold uppercase tracking-[0.3em] font-title">NO BULLSH$T.</h2>
+            <p class="text-lg mt-6 uppercase tracking-widest text-white">Just the work.</p>
+        </div>
+
+        <div id="view-contact" class="content-section flex-col items-center pt-32 h-full font-mono">
+            <a href="mailto:sys@krydel73.com" class="text-3xl md:text-5xl font-bold uppercase hover:bg-red hover:text-black transition-colors px-8 py-6 border-2 border-red">
+                SYS@KRYDEL73.COM
+            </a>
+        </div>
+
+    </main>
+
+    <div id="video-modal" class="fixed inset-0 bg-black/90 flex-col justify-center items-center p-4 md:p-10 pointer-events-none">
+        <div class="w-full max-w-6xl flex justify-end mb-4 pointer-events-auto">
+            <button id="close-modal" class="text-red font-bold uppercase tracking-[0.3em] hover:text-white transition-colors font-mono text-sm md:text-base">
+                [ CLOSE X ]
+            </button>
+        </div>
+        <div class="w-full max-w-6xl bg-black border border-red shadow-[0_0_80px_rgba(255,0,0,0.2)] pointer-events-auto">
+            <div class="video-wrapper" id="iframe-container"></div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            /* --- 1. Realistic Canvas CRT Snow Generator --- */
+            const canvas = document.getElementById('tv-noise');
+            const ctx = canvas.getContext('2d');
+            let w, h, imgData, data;
+
+            function resizeCanvas() {
+                // Ensure dimensions are at least 1px to prevent DOMException errors in iframes
+                w = canvas.width = Math.max(1, window.innerWidth / 2.5); 
+                h = canvas.height = Math.max(1, window.innerHeight / 2.5);
+                imgData = ctx.createImageData(w, h);
+                data = imgData.data;
+            }
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
+
+            function renderNoise() {
+                for (let i = 0; i < data.length; i += 4) {
+                    const color = Math.random() * 255; // Grayscale noise
+                    data[i]     = color; // R
+                    data[i+1]   = color; // G
+                    data[i+2]   = color; // B
+                    data[i+3]   = 255;   // Alpha
+                }
+                ctx.putImageData(imgData, 0, 0);
+                requestAnimationFrame(renderNoise);
+            }
+            requestAnimationFrame(renderNoise);
+
+
+            /* --- 2. Typewriter Animation Sequence --- */
+            const titleEl = document.getElementById('sys-title');
+            const titleText = titleEl.getAttribute('data-text');
+            const navElements = document.querySelectorAll('.type-target');
+            titleEl.innerHTML = ''; 
+            
+            let charIndex = 0;
+            
+            function typeTitle() {
+                if (charIndex < titleText.length) {
+                    titleEl.innerHTML += titleText.charAt(charIndex);
+                    charIndex++;
+                    setTimeout(typeTitle, 80); // Speed of title typing
+                } else {
+                    setTimeout(() => {
+                        document.getElementById('title-cursor').style.display = 'none';
+                        typeNavElements(0);
+                    }, 300); // Delay before nav starts typing
+                }
+            }
+
+            function typeNavElements(index) {
+                if (index < navElements.length) {
+                    const el = navElements[index];
+                    const text = el.getAttribute('data-text') || '';
+                    el.innerHTML = '';
+                    el.style.opacity = 1;
+                    
+                    let nChar = 0;
+                    function typeWord() {
+                        if (nChar < text.length) {
+                            el.innerHTML += text.charAt(nChar);
+                            nChar++;
+                            setTimeout(typeWord, 20); // Very fast typing for nav
+                        } else {
+                            setTimeout(() => { typeNavElements(index + 1); }, 40);
+                        }
+                    }
+                    typeWord();
+                }
+            }
+
+            // Start Typing Sequence shortly after page load
+            setTimeout(typeTitle, 600);
+
+
+            /* --- 3. Random CRT Glitch Engine --- */
+            const glitchTargets = document.querySelectorAll('.glitch-target');
+            
+            function triggerRandomGlitch() {
+                if(glitchTargets.length === 0) return;
+                
+                // Pick random thumbnail across all views
+                const randIndex = Math.floor(Math.random() * glitchTargets.length);
+                const el = glitchTargets[randIndex];
+                
+                // Trigger CSS Animation class
+                el.classList.add('crt-glitch');
+                
+                // Remove glitch exactly after 0.15s (150ms) as requested
+                setTimeout(() => {
+                    el.classList.remove('crt-glitch');
+                }, 150);
+
+                // Schedule next glitch between 8 and 15 seconds as requested
+                const nextGlitchTime = Math.random() * 7000 + 8000;
+                setTimeout(triggerRandomGlitch, nextGlitchTime);
+            }
+            
+            // Start glitch engine once typing is roughly done
+            setTimeout(triggerRandomGlitch, 3000);
+
+
+            /* --- 4. Dashboard View Router (SPA Logic) --- */
+            const navLinks = document.querySelectorAll('.nav-link[data-target]');
+            const sections = document.querySelectorAll('.content-section');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    const targetId = e.target.getAttribute('data-target');
+                    if (!targetId) return; // Prevent errors on links without a target
+
+                    // Update active nav state
+                    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active', 'bg-red', 'text-black'));
+                    e.target.classList.add('active');
+
+                    // Switch sections
+                    sections.forEach(sec => {
+                        sec.classList.remove('active');
+                        if(sec.id === targetId) {
+                            sec.classList.add('active');
+                        }
+                    });
+                });
+            });
+
+
+            /* --- 5. Portfolio Thumb / List Toggle Logic --- */
+            const btnThumb = document.getElementById('btn-thumb');
+            const btnList = document.getElementById('btn-list');
+            const portThumb = document.getElementById('port-thumb');
+            const portList = document.getElementById('port-list');
+
+            if(btnThumb && btnList) {
+                btnThumb.addEventListener('click', () => {
+                    btnThumb.classList.add('border-red');
+                    btnThumb.classList.remove('border-transparent', 'opacity-50');
+                    
+                    btnList.classList.remove('border-red');
+                    btnList.classList.add('border-transparent', 'opacity-50');
+                    
+                    portThumb.classList.remove('hidden');
+                    portList.classList.add('hidden');
+                });
+
+                btnList.addEventListener('click', () => {
+                    btnList.classList.add('border-red');
+                    btnList.classList.remove('border-transparent', 'opacity-50');
+                    
+                    btnThumb.classList.remove('border-red');
+                    btnThumb.classList.add('border-transparent', 'opacity-50');
+                    
+                    portList.classList.remove('hidden');
+                    portList.classList.add('flex');
+                    portThumb.classList.add('hidden');
+                });
+            }
+
+
+            /* --- 6. Video Modal Logic --- */
+            const modal = document.getElementById('video-modal');
+            const closeModalBtn = document.getElementById('close-modal');
+            const iframeContainer = document.getElementById('iframe-container');
+            const videoTriggers = document.querySelectorAll('[data-video]');
+
+            videoTriggers.forEach(item => {
+                item.addEventListener('click', () => {
+                    const videoUrl = item.getAttribute('data-video');
+                    if(videoUrl) {
+                        iframeContainer.innerHTML = `<iframe src="${videoUrl}" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
+                        modal.classList.add('active');
+                        modal.style.pointerEvents = 'auto'; // allow clicking inside modal
+                    }
+                });
+            });
+
+            function closeModal() {
+                modal.classList.remove('active');
+                modal.style.pointerEvents = 'none';
+                setTimeout(() => { iframeContainer.innerHTML = ''; }, 300); // clear iframe after transition
+            }
+
+            closeModalBtn.addEventListener('click', closeModal);
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modal.classList.contains('active')) closeModal();
+            });
+
+        });
+    </script>
+</body>
+</html>
